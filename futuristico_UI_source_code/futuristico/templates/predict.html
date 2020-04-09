@@ -1,0 +1,181 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>Futuristico - Prediction Result</title>
+		
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+		<style type="text/css"></style>
+		 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css')}} "/>
+		
+		<script type="text/javascript">
+			$(function () {
+
+			$('#container').highcharts({
+
+				chart: {
+					type: 'gauge',
+					plotBackgroundColor: null,
+					plotBackgroundImage: null,
+					plotBorderWidth: 0,
+					plotShadow: false
+				},
+
+				title: {
+					text: 'Box Office Revenue Indicator'
+				},
+
+				pane: {
+					startAngle: -150,
+					endAngle: 150,
+					background: [{
+						backgroundColor: {
+							linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 },
+							stops: [
+								[0, '#FFF'],
+								[1, '#333']
+							]
+						},
+						borderWidth: 0,
+						outerRadius: '109%'
+					}, {
+						backgroundColor: {
+							linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 },
+							stops: [
+								[0, '#333'],
+								[1, '#FFF']
+							]
+						},
+						borderWidth: 1,
+						outerRadius: '107%'
+					}, {
+						// default background
+					}, {
+						backgroundColor: '#DDD',
+						borderWidth: 0,
+						outerRadius: '105%',
+						innerRadius: '103%'
+					}]
+				},
+
+				// the value axis
+				yAxis: {
+					min: 0,
+					max: 100000000,
+
+					minorTickInterval: 'auto',
+					minorTickWidth: 1,
+					minorTickLength: 10,
+					minorTickPosition: 'inside',
+					minorTickColor: '#666',
+
+					tickPixelInterval: 30,
+					tickWidth: 2,
+					tickPosition: 'inside',
+					tickLength: 10,
+					tickColor: '#666',
+					labels: {
+						step: 2,
+						rotation: 'auto'
+					},
+					title: {
+						text: '$'
+					},
+					plotBands: [{
+						from: 0,
+						to: 200000,
+						color: '#B62121' // dark red
+					}, {
+						from: 200000,
+						to: 5000000,
+						color: '#FB0000' // red
+					}, {
+						from: 5000000,
+						to: 20000000,
+						color: '#FBBE00' // orange
+					}, {
+						from: 20000000,
+						to: 40000000,
+						color: '#FDFF00' // yellow
+					}, {
+						from: 40000000,
+						to: 80000000,
+						color: '#3CFF00' // green
+					}, {
+						from: 80000000,
+						to: 760500000,
+						color: '#00B8FF' // blue
+					}]
+				},
+
+				series: [{
+					name: 'Box Office Revenue',
+			    {% block content %}
+					data: [{{ high_chart }}],
+				
+					tooltip: {
+						valuePrefix: '$ ',
+						valueSuffix: ' million'
+					}
+				}]
+
+			},
+				// Add some life
+				function (chart) {
+					if (!chart.renderer.forExport) {
+						setInterval(function () {
+							var point = chart.series[0].points[0],
+								newVal,
+								inc = Math.round((Math.random() - 0.5) * 20);
+
+							newVal = point.y + inc;
+							if (newVal < 181 || newVal > 760500000) {
+								newVal = point.y - inc;
+							}
+
+							point.update(newVal);
+
+						}, 3000);
+					}
+				});
+		});
+		</script>
+	</head>
+
+	<body>
+		<script type="text/javascript" src="{{ url_for('static', filename='js/highcharts.js')}}"></script>
+		<script type="text/javascript" src="{{ url_for('static', filename='js/highcharts-more.js')}}"></script>
+		<script type="text/javascript" src="{{ url_for('static', filename='js/modules/exporting.js')}}"></script>
+		<script type="text/javascript" src="{{ url_for('static', filename='js/modules/solid-gauge.src.js')}}"></script>
+		
+        <a href="{{ url_for('homepage') }}" style="color: #0000FF; font-size: 16px; font-weight: bold">Predict Another One</a><br><br>
+			
+        <div class="container" style="min-width: 310px; max-width: 1350px;margin: 0 auto">		
+			    <h1 style="font-weight:bold; color: white; text-align: center"> {{ title }} </h1>
+				<div style="height: 300px;margin: 10px;">
+					
+					<h2 style="margin: 0px auto; width: 350px; padding-top: 20px; font-weight: bold;color: white;">Story outline:</h2> <br>
+					<p style="margin: 0px auto; width: 350px; padding-top: 20px; font-weight: bold; font-size: 20px">{{ plot }}</p>
+				</div><br><hr>
+				<div style="width: 400px;">
+					<h2 style="font-weight:bold;color: white; margin-left:20px; margin-top: 20px">Result of prediction: </h2>
+					<h2 style="font-weight:bold; margin-left:100px; margin-bottom: 20px"> $ {{ boxOffice }}  </h2>
+				</div>
+			{% endblock %}
+		</div><br>
+			<aside id="colorChart" style="float: right; width: 500px">
+				$181 - $200,000<div style="background-color:#B62121; width:100px; height: 50px"></div><br><br>
+				$200,000 - $5,000,000 (5M)<div style="background-color:#FB0000; width:100px; height: 50px"></div><br><br>
+				$5,000,000 (5M) - $20,000,000 (20M)<div style="background-color:#FBBE00; width:100px; height: 50px"></div><br><br>
+				$20,000,000 (20M) - $40,000,000 (40M)<div style="background-color:#FDFF00; width:100px; height: 50px"></div><br><br>
+				$40,000,000 (40M) - $80,000,000 (80M)<div style="background-color:#3CFF00; width:100px; height: 50px"></div><br><br>
+				$80,000,000 (80M) - $760,000,000 (760M)<div style="background-color:#00B8FF; width:100px; height: 50px"></div><br><br>
+				
+			</aside>
+			<div id="container" style="min-width: 100px; max-width: 500px; height: 500px; width: 500px; margin-left: 100px;"></div>
+			
+		
+
+
+	</body>
+</html>
